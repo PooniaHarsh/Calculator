@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Calculator</title>
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-calculator"></i> Marks Calculator</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('practical')">Practical Calculator</button>
+            <button class="tab-btn" onclick="openTab('theory')">Theory Calculator</button>
+        </div>
+
+        <div id="practical" class="tab-content active">
+            <form id="practicalForm">
+                <div class="input-group">
+                    <label><i class="fas fa-pencil-alt"></i> Assignment Marks</label>
+                    <input type="number" step="any" id="assignment" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-user-check"></i> Attendance Marks</label>
+                    <input type="number" step="any" id="attendance" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-surprise"></i> Surprise Test Marks (out of 12)</label>
+                    <input type="number" step="any" id="surpriseTest" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-question-circle"></i> Quiz Marks</label>
+                    <input type="number" step="any" id="quiz" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-file-alt"></i> MST 1 Marks</label>
+                    <input type="number" step="any" id="mst1" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-file-alt"></i> MST 2 Marks</label>
+                    <input type="number" step="any" id="mst2" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-flask"></i> End Sem Practical Marks</label>
+                    <input type="number" step="any" id="end" placeholder="Enter marks">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-vial"></i> Lab MST Marks (out of 10)</label>
+                    <input type="number" step="any" id="labmst" placeholder="Enter marks">
+                </div>
+
+                <h3><i class="fas fa-tasks"></i> Worksheet Marks (each out of 30)</h3>
+                <div class="worksheet-grid">
+                    <input type="number" step="any" id="ws1" placeholder="WS 1">
+                    <input type="number" step="any" id="ws2" placeholder="WS 2">
+                    <input type="number" step="any" id="ws3" placeholder="WS 3">
+                    <input type="number" step="any" id="ws4" placeholder="WS 4">
+                    <input type="number" step="any" id="ws5" placeholder="WS 5">
+                    <input type="number" step="any" id="ws6" placeholder="WS 6">
+                    <input type="number" step="any" id="ws7" placeholder="WS 7">
+                    <input type="number" step="any" id="ws8" placeholder="WS 8">
+                    <input type="number" step="any" id="ws9" placeholder="WS 9">
+                    <input type="number" step="any" id="ws10" placeholder="WS 10">
+                </div>
+
+                <button type="button" onclick="calculatePracticalMarks()">
+                    <i class="fas fa-calculator"></i> Calculate Practical Marks
+                </button>
+                <p id="practicalResult"></p>
+            </form>
+        </div>
+
+        <div id="theory" class="tab-content">
+            <form id="theoryForm">
+                <div class="input-group">
+                    <label><i class="fas fa-pencil-alt"></i> Assignment Marks (out of 10)</label>
+                    <input type="number" id="theoryAssignment" min="0" max="10" step="0.5" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-user-check"></i> Attendance Marks (out of 2)</label>
+                    <input type="number" id="theoryAttendance" min="0" max="2" step="0.5" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-file-alt"></i> MST-1 Marks (out of 20)</label>
+                    <input type="number" id="theoryMst1" min="0" max="20" step="0.5" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-file-alt"></i> MST-2 Marks (out of 20)</label>
+                    <input type="number" id="theoryMst2" min="0" max="20" step="0.5" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-question-circle"></i> Quiz Marks (out of 4)</label>
+                    <input type="number" id="theoryQuiz" min="0" max="4" step="0.5" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-surprise"></i> Surprise Test Marks (out of 12)</label>
+                    <input type="number" id="theorySurpriseTest" min="0" max="12" step="0.5" required>
+                </div>
+
+                <button type="button" onclick="calculateTheoryMarks()">
+                    <i class="fas fa-calculator"></i> Calculate Theory Marks
+                </button>
+                <p id="theoryResult"></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let content of tabContents) {
+                content.classList.remove("active");
+            }
+
+            // Remove active class from all buttons
+            const tabButtons = document.getElementsByClassName("tab-btn");
+            for (let button of tabButtons) {
+                button.classList.remove("active");
+            }
+
+            // Show the selected tab content and activate the button
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        function calculatePracticalMarks() {
+            const get = id => parseFloat(document.getElementById(id).value) || 0;
+
+            // Get all input values
+            const assignment = get("assignment");
+            const attendance = get("attendance");
+            const surpriseTest = get("surpriseTest");
+            const quiz = get("quiz");
+            const mst1 = get("mst1");
+            const mst2 = get("mst2");
+            const end = get("end");
+            const labmst = get("labmst");
+
+            // Get worksheet marks
+            const ws1 = get("ws1");
+            const ws2 = get("ws2");
+            const ws3 = get("ws3");
+            const ws4 = get("ws4");
+            const ws5 = get("ws5");
+            const ws6 = get("ws6");
+            const ws7 = get("ws7");
+            const ws8 = get("ws8");
+            const ws9 = get("ws9");
+            const ws10 = get("ws10");
+
+            // Calculate surprise test marks (s)
+            const s = (surpriseTest / 12) * 4;
+
+            // Calculate lab MST marks (n)
+            const n = (labmst / 10) * 15;
+
+            // Calculate worksheet total
+            const worksheet = ((ws1 + ws2 + ws3 + ws4 + ws5 + ws6 + ws7 + ws8 + ws9 + ws10) / 300) * 45;
+
+            // Calculate MST average
+            const m = (mst1 + mst2) / 2;
+
+            // Calculate total internal marks
+            const total = ((assignment + quiz + m + attendance + s + worksheet + end + n) / 140) * 70;
+
+            const resultElement = document.getElementById("practicalResult");
+            resultElement.innerHTML = `<i class="fas fa-chart-line"></i> Your Internal Marks = ${total.toFixed(2)}`;
+        }
+
+        function calculateTheoryMarks() {
+            // Get all input values
+            const assignment = parseFloat(document.getElementById('theoryAssignment').value) || 0;
+            const attendance = parseFloat(document.getElementById('theoryAttendance').value) || 0;
+            const mst1 = parseFloat(document.getElementById('theoryMst1').value) || 0;
+            const mst2 = parseFloat(document.getElementById('theoryMst2').value) || 0;
+            const quiz = parseFloat(document.getElementById('theoryQuiz').value) || 0;
+            const surpriseTest = parseFloat(document.getElementById('theorySurpriseTest').value) || 0;
+
+            // Validate inputs
+            if (assignment > 10 || attendance > 2 || mst1 > 20 || mst2 > 20 || quiz > 4 || surpriseTest > 12) {
+                document.getElementById("theoryResult").innerHTML = 'Please enter valid marks within the specified ranges.';
+                return;
+            }
+
+            // Calculate total marks
+            const totalMarks = assignment + attendance + mst1 + mst2 + quiz + surpriseTest;
+            const finalScore = (totalMarks / 68) * 40;
+
+            // Display result
+            const resultText = `
+             
+                Final Score (out of 40): ${finalScore.toFixed(2)}
+            `;
+            document.getElementById("theoryResult").innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
+   <!-- new piont taken -->
